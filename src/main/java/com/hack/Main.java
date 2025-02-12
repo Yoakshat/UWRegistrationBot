@@ -1,10 +1,12 @@
 package com.hack;
 
-import java.time.Duration;
 import java.util.*;
+
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+
 
 public class Main {
 
@@ -20,9 +22,19 @@ public class Main {
         slns.add("62713");
         slns.add("13232");
 
+        Plan plan = new Plan(); 
+        String[] courseArray = {"CSE 351"};
+        
+        plan.createPlan(courseArray, driver);
 
-        Optimal obj = new Optimal(driver, slns, 17);
-        action(driver, obj);
+        // Optimal obj = new Optimal(driver, slns, 17);
+        // action(driver, obj); 
+        
+        // example of scheduling at fixed rates in selenium
+        /*Timer timer = new Timer(); 
+        TimerTask task = new Typer(driver);
+
+        timer.scheduleAtFixedRate(task, 50, 1 * 50);*/
     }
 
     public static void action(WebDriver driver, Optimal obj){
@@ -32,25 +44,28 @@ public class Main {
         driver.get("https://my.uw.edu/");
 
 
-        WebElement netId = driver.findElement(By.id("weblogin_netid"));
-        WebElement pass = driver.findElement(By.id("weblogin_password"));
-        WebElement submit = driver.findElement(By.id("submit_button"));
+        Helper help = new Helper(); 
+        help.login(driver); 
 
-        netId.sendKeys("akshatm1");
-        pass.sendKeys("Yoa$hu121805");
-        submit.click();
 
-        // for your duo login
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        
-        // TODO: Keep scrolling up and down until time is reached
-        
-        driver.findElement(By.cssSelector("a[href='/academics/']")).click();
-        driver.findElement(By.cssSelector("a[href='https://sdb.admin.uw.edu/students/uwnetid/register.asp']")).click();
-        
+        // comment out this line day-of
+        // keepPageActive(driver, "4:59")
+            
+        By acd = By.cssSelector("a[href='/academics/']");
+        help.clickWhenPresent(driver, acd);
+
+        By reg = By.cssSelector("a[href='https://sdb.admin.uw.edu/students/uwnetid/register.asp']");
+        help.clickWhenPresent(driver, reg);
+
+    
         obj.registerEverything();
     }
 
+    
+
+
+
+    
 
     
 }

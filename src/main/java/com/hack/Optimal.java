@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+// Optimal registration
 public class Optimal {
     
     private WebDriver driver; 
@@ -38,6 +39,8 @@ public class Optimal {
         WebElement firstSln = driver.findElement(By.xpath("//*[@id=\"regform\"]/table[2]/tbody/tr[2]/td[1]/input"));
         String name = firstSln.getAttribute("name");
         int digit = Integer.parseInt(name.substring(3));
+
+        // TODO: keep reloading the page until you face no errors with above code ^
 
         for(int i = index; i <= index+1; i++){
             if(slns.get(i) != "-1"){
