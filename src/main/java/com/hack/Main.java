@@ -26,6 +26,9 @@ public class Main {
         String[] courseArray = {"CSE 351"};
         
         plan.createPlan(courseArray, driver);
+        // this is the trick!
+        // System.out.println("spring-" + String.valueOf((char)('a' + 2)));
+
 
         // Optimal obj = new Optimal(driver, slns, 17);
         // action(driver, obj); 
