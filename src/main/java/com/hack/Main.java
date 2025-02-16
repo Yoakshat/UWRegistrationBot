@@ -23,9 +23,11 @@ public class Main {
         slns.add("13232");
 
         
-        String[] courseArray = {"CSE 351", "CSE 331"};
+        String[] courseArray = {"CSE 331", "MATH 300"};
         Plan plan = new Plan(courseArray, driver); 
-        plan.createPlans();
+        plan.createPlans(20);
+
+        
         // this is the trick!
         // System.out.println("spring-" + String.valueOf((char)('a' + 2)));
 

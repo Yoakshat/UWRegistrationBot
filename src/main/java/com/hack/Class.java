@@ -25,7 +25,8 @@ public class Class implements Comparable<Class> {
                 // remove lecture
                 toRemove.add(lecture);
                 store.add(new LecMod(i, lecture));
-            }
+            } 
+            
             i += 1; 
         }
 
