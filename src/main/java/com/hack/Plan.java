@@ -19,8 +19,8 @@ public class Plan {
     }
 
     // generate up to n plans using recursive backtracking
-    public void createPlans(){
-        createPlans(new ArrayList<String>(), this.classes, 3);
+    public void createPlans(int n){
+        createPlans(new ArrayList<String>(), this.classes, n);
 
         System.out.println(this.plans.toString());
     }
@@ -29,8 +29,9 @@ public class Plan {
     // delete classes whenever we've used them
     // recursive backtracking
 
-    // TODO: fix error getting all lectures
+    // TODO: test
     private void createPlans(List<String> plan, List<Class> classes, int n){
+
         // generated enough plans
         if(this.plans.size() >= n){
             return; 
@@ -38,7 +39,13 @@ public class Plan {
 
         // successful picked all classes
         if(classes.size() == 0){
-            this.plans.add(plan);
+            // Q: why can't you just do this.plans.add(plan)
+            // A: reference semantics (problem when we unchoose)
+            List<String> newPlan = new ArrayList<>();
+            for(String p: plan){
+                newPlan.add(p);
+            }
+            this.plans.add(newPlan);
             return; 
         }
 
@@ -75,6 +82,7 @@ public class Plan {
                 j += 1; 
             }
             classes.add(0, first);
+            plan.remove(picked.getSLN());
             
         }
 
