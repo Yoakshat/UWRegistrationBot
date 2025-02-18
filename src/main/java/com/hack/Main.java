@@ -23,9 +23,11 @@ public class Main {
         slns.add("13232");
 
         
-        String[] courseArray = {"CSE 331", "MATH 300"};
+        String[] courseArray = {"CSE 331", "MATH 126"};
         Plan plan = new Plan(courseArray, driver); 
-        plan.createPlans(20);
+        // 24 possibilities for just MATH 126
+        // 426 course possibilities with 2 classes (wowza)
+        plan.createPlans(1000); 
 
         
         // this is the trick!
