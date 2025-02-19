@@ -21,7 +21,7 @@ public class Plan {
 
     // generate up to n plans using recursive backtracking
     public void createPlans(int n){
-        createPlans(new ArrayList<String>(), this.classes, n);
+        createPlans(new ArrayList<String>(), n);
 
         System.out.println(this.plans.toString());
         System.out.println(this.plans.size());
@@ -32,7 +32,7 @@ public class Plan {
     // recursive backtracking
 
     // TODO: fix this to now incorp quiz sections
-    private void createPlans(List<String> plan, List<Class> classes, int n){
+    private void createPlans(List<String> plan, int n){
 
         // generated enough plans
         if(this.plans.size() >= n){
@@ -50,11 +50,13 @@ public class Plan {
             this.plans.add(newPlan);
             return; 
         }
-
+        
+        // sort from classes downwards
         Collections.sort(classes);
 
         Class pick = classes.get(0);
         int secs = pick.numSections();
+
 
         // fails if we get to a class and no classes left
         if(secs == 0){
@@ -62,16 +64,22 @@ public class Plan {
         }
 
         // go in order
+        // should not give permutations
+
         for(int i = 0; i < secs; i++){
             QuizSection picked = pick.get(i);
+            Class first = classes.remove(0);
+
+            boolean addQuizClass = !picked.isQuiz() && picked.getQuizzes().size() > 0;
+
             // check if picked is a lecture or a quiz section
-            if(!picked.isQuiz()){
-                // if lecture
+            if(addQuizClass){
+                // add a new class filled with quiz sections
                 classes.add(new Class(pick.toString(), picked.getQuizzes()));
             }
             
             // CHOOSE
-            Class first = classes.remove(0);
+
             plan.add(picked.getSLN());
 
             List<List<LecMod>> stored = new ArrayList<>();
@@ -81,28 +89,29 @@ public class Plan {
 
 
             // DO
-            createPlans(plan, classes, n);
+            createPlans(plan, n);
 
             // UNCHOOSE
             
-            // remove the last item if(!picked.isQuiz)
-            if(!picked.isQuiz()){
+            // if you added a quiz section, just remove it!
+            if(addQuizClass){
                 classes.remove(classes.size() - 1);
             }
-
+            
             // for Class c, add overlap back
             int j = 0; 
             for(Class c: classes){
                 c.addOverlap(stored.get(j));
                 j += 1; 
             }
-            
-            // add class back
+
             classes.add(0, first);
+
             // remove added plan
             plan.remove(picked.getSLN());
             
         }
+
 
 
     }   
@@ -157,9 +166,15 @@ public class Plan {
             driver.findElement(By.className("form-control")).sendKeys(course); 
             driver.findElement(By.cssSelector("button[type='submit']")).click();
 
-            // then check box for spring quarter
-            // TODO: if necessary, fix when there's no spring or only 1 spring
-            help.clickWhenPresent(driver, By.id("term__Spring 2025"));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+
+            WebElement search = driver.findElement(By.className("search-results"));
+            int numRows = search.findElements(By.cssSelector("tr")).size() - 1;
+
+            // check box for spring quarter only if multiple classes
+            if (numRows > 1){
+                help.clickWhenPresent(driver, By.id("term__Spring 2025"));
+            }
 
             // then get the first link in the search results
             String selector = String.format("a[title*='%s']", course);
@@ -199,7 +214,8 @@ public class Plan {
                         }
     
                     }
-
+                    
+                    // everything starts of as a lecture
                     sections.add(new Lecture(createQuiz(tRow), quizSecs));
                     
                     
