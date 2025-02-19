@@ -1,5 +1,6 @@
 package com.hack;
 
+import java.text.ParseException;
 import java.util.*;
 
 
@@ -12,7 +13,7 @@ public class Main {
 
     // idea: login once, keep page active by constant scrolling up and down
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException{
         WebDriver driver = new ChromeDriver();
 
         // Duo.acceptCall();
@@ -22,11 +23,12 @@ public class Main {
         slns.add("62713");
         slns.add("13232");
 
-        
-        String[] courseArray = {"CSE 331", "MATH 126"};
+        // 5 classes -> 720 possibilities
+        String[] courseArray = {"CSE 331", "MATH 208", "DRAMA 252", "CLAS 430"};
+
+
         Plan plan = new Plan(courseArray, driver); 
-        // 24 possibilities for just MATH 126
-        // 426 course possibilities with 2 classes (wowza)
+        // 27 possibilities with 3 classes
         plan.createPlans(1000); 
 
         

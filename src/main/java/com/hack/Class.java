@@ -48,6 +48,9 @@ public class Class implements Comparable<Class> {
             i += 1; 
         }
 
+        // I FORGOT THIS (NANI!)
+        sections.removeAll(toRemove);
+
         return addBack;
     }
 
