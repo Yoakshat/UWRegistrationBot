@@ -30,8 +30,6 @@ public class Plan {
     // whenever successful add to plan
     // delete classes whenever we've used them
     // recursive backtracking
-
-    // TODO: fix this to now incorp quiz sections
     private void createPlans(List<String> plan, int n){
 
         // generated enough plans
@@ -116,30 +114,67 @@ public class Plan {
 
     }   
 
+    // get time data from timebox
+    private TimeRange getTimeRange(WebElement tRow) throws ParseException{
+        WebElement timeBox = tRow.findElement(By.xpath("tr[1]/td[4]/div/div[2]"));
+
+        String days = timeBox.findElement(By.xpath("div[1]/span[1]")).getText();
+        List<WebElement> timeElems = timeBox.findElement(By.xpath("div[2]"))
+            .findElements(By.tagName("time"));
+
+        return new TimeRange(timeElems.get(0).getText(), 
+                    timeElems.get(1).getText(), 
+                    Arrays.asList(days.split("[, ]+")));
+    }
+
     private QuizSection createQuiz(WebElement tRow) throws ParseException{
 
         // take a tRow and create a lecture                    
         String slnCode = tRow.findElement(By.xpath("tr[1]/td[6]")).getText().split("\\n")[1];
-
-        WebElement info = tRow.findElement(By.xpath("tr[1]/td[4]/div/div[2]"));
-
-        // then get day
-        String days = info.findElement(By.xpath("div[1]/span[1]")).getText();
-
         
-        
-        // unable to locate below element
-
-        // now get time
-        List<WebElement> timeElems = info.findElement(By.xpath("div[2]"))
-            .findElements(By.tagName("time"));
-        
-        TimeRange timeClass = new TimeRange(timeElems.get(0).getText(), 
-                                            timeElems.get(1).getText(), 
-                                            Arrays.asList(days.split("[, ]+")));
+        TimeRange timeClass = getTimeRange(tRow);
 
         return new QuizSection(slnCode, timeClass);
 
+    }
+
+    private boolean isValid(WebElement tRow, boolean lecture) throws ParseException{
+        // check for in-person
+        String arrangement = tRow.findElement(By.xpath("tr[1]/td[4]/div/div[1]/span[2]")).getText();
+        System.out.println(arrangement);
+        if(!arrangement.contains("In-person")){
+            return false; 
+        }
+
+        // check for open
+        String open = tRow.findElement(By.xpath("tr[1]/td[7]/div/span")).getText(); 
+        System.out.println(open);
+        if(!open.contains("Open")){
+            return false; 
+        }
+
+        // check if not too early
+        if(getTimeRange(tRow).tooEarly()){
+            return false;
+        }
+
+        // check if number of seats > 20 
+        // (otherwise most likely another special class)
+        if(lecture){
+            String seatString = tRow.findElement(By.xpath("tr[1]/td[7]/small")).getText();
+            //  get the last element
+            String[] seatArr = seatString.split("\\s+");
+            int numSeats = Integer.parseInt(seatArr[seatArr.length - 1]);
+
+            if(numSeats < 20){
+                return false; 
+            }
+        }
+
+
+
+        // if fulfilled all other conditions
+        return true; 
     }
 
 
@@ -190,7 +225,8 @@ public class Plan {
             // arrayList of sections
             List<QuizSection> sections = new ArrayList<>();
             
-
+            // TODO: instead go backwards (go from latest time to earliest time)
+            // I WANT LATE CLASSES!
             while(true){
                 // try getting id
                 String getID = "spring-" + String.valueOf((char)('a' + lectIdx));
@@ -210,13 +246,17 @@ public class Plan {
                             skipFirst += 1;
                         } else {
                             // get quiz section
-                            quizSecs.add(createQuiz(qr));
+                            if(isValid(qr, false)){
+                                quizSecs.add(createQuiz(qr));
+                            }
                         }
     
                     }
                     
                     // everything starts of as a lecture
-                    sections.add(new Lecture(createQuiz(tRow), quizSecs));
+                    if(isValid(tRow, true)){
+                        sections.add(new Lecture(createQuiz(tRow), quizSecs));
+                    }
                     
                     
                     lectIdx += 1; 
