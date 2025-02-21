@@ -24,7 +24,7 @@ public class Main {
         slns.add("13232");
 
         // 5 classes -> 720 possibilities
-        String[] courseArray = {"CSE 331", "MATH 208", "DRAMA 252", "CLAS 430"};
+        String[] courseArray = {"MATH 126"};
 
 
         Plan plan = new Plan(courseArray, driver); 
