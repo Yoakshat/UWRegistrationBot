@@ -8,6 +8,7 @@ import java.util.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 
 public class Helper {
     public void login(WebDriver driver){
@@ -18,6 +19,19 @@ public class Helper {
         netId.sendKeys("akshatm1");
         pass.sendKeys("Yoa$hu121805");
         submit.click();
+    }
+
+    public void waitTillPresent(WebDriver driver, By by){
+        while(true){
+            try{
+                driver.findElement(by);
+                // wait one second just to be sure
+                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+                break;
+            } catch (Exception e){
+
+            }
+        }
     }
 
     public void clickWhenPresent(WebDriver driver, By by){
@@ -47,6 +61,8 @@ public class Helper {
                     // scroll up and down
                     jse.executeScript("scroll(0, -15)");
                     jse.executeScript("scroll(0, 15)");
+                    // wait 5 seconds
+                    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
                 }
             }
         } catch (ParseException e){

@@ -27,6 +27,10 @@ public class Plan {
         System.out.println(this.plans.size());
     }
 
+    public List<String> getPlan(int i){
+        return this.plans.get(i);
+    }
+
     // whenever successful add to plan
     // delete classes whenever we've used them
     // recursive backtracking
@@ -141,22 +145,20 @@ public class Plan {
     private boolean isValid(WebElement tRow, boolean lecture) throws ParseException{
         // check for in-person
         String arrangement = tRow.findElement(By.xpath("tr[1]/td[4]/div/div[1]/span[2]")).getText();
-        System.out.println(arrangement);
         if(!arrangement.contains("In-person")){
             return false; 
         }
 
         // check for open
         String open = tRow.findElement(By.xpath("tr[1]/td[7]/div/span")).getText(); 
-        System.out.println(open);
         if(!open.contains("Open")){
             return false; 
         }
 
         // check if not too early
-        if(getTimeRange(tRow).tooEarly()){
+        /*if(getTimeRange(tRow).tooEarly()){
             return false;
-        }
+        }*/
 
         // check if number of seats > 20 
         // (otherwise most likely another special class)
@@ -224,8 +226,7 @@ public class Plan {
             
             // arrayList of sections
             List<QuizSection> sections = new ArrayList<>();
-            
-            // TODO: instead go backwards (go from latest time to earliest time)
+        
             // I WANT LATE CLASSES!
             while(true){
                 // try getting id
@@ -261,6 +262,7 @@ public class Plan {
                     
                     lectIdx += 1; 
                 } catch (Exception e) {
+                    // System.out.println(e.getMessage());
                     break; 
                 }
             }

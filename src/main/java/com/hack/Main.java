@@ -1,7 +1,6 @@
 package com.hack;
 
 import java.text.ParseException;
-import java.util.*;
 
 
 import org.openqa.selenium.*;
@@ -11,21 +10,24 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Main {
 
-    // idea: login once, keep page active by constant scrolling up and down
+    // enable setting to keep desktop on 
+    // keep computer charged
     
     public static void main(String[] args) throws ParseException{
         WebDriver driver = new ChromeDriver();
 
         // Duo.acceptCall();
-        List<String> slns = new ArrayList<String>();
+        /*List<String> slns = new ArrayList<String>();
         slns.add("13432");
         slns.add("28719");
         slns.add("62713");
-        slns.add("13232");
+        slns.add("13232");*/
 
         // 5 classes -> 720 possibilities
-        String[] courseArray = {"MATH 126"};
 
+        // ERROR with following classes
+        String[] courseArray = {"GEOG 342", "CSE 312", "CSE 332", "DRAMA 252"};
+        
 
         Plan plan = new Plan(courseArray, driver); 
         // 27 possibilities with 3 classes
@@ -36,14 +38,13 @@ public class Main {
         // System.out.println("spring-" + String.valueOf((char)('a' + 2)));
 
 
-        // Optimal obj = new Optimal(driver, slns, 17);
-        // action(driver, obj); 
-        
-        // example of scheduling at fixed rates in selenium
-        /*Timer timer = new Timer(); 
-        TimerTask task = new Typer(driver);
+        Optimal obj = new Optimal(driver, plan.getPlan(0));
+        try{
+            action(driver, obj); 
+        } catch (Exception e){
+            AlarmSound.sound();
+        }
 
-        timer.scheduleAtFixedRate(task, 50, 1 * 50);*/
     }
 
     public static void action(WebDriver driver, Optimal obj){
@@ -57,8 +58,7 @@ public class Main {
         help.login(driver); 
 
 
-        // comment out this line day-of
-        // keepPageActive(driver, "4:59")
+        
             
         By acd = By.cssSelector("a[href='/academics/']");
         help.clickWhenPresent(driver, acd);
@@ -66,8 +66,12 @@ public class Main {
         By reg = By.cssSelector("a[href='https://sdb.admin.uw.edu/students/uwnetid/register.asp']");
         help.clickWhenPresent(driver, reg);
 
+        // comment out this line day-of
+        help.keepPageActive(driver, "5:59");
+
     
         obj.registerEverything();
+        
     }
 
     
