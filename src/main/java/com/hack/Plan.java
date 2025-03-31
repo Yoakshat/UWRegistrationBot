@@ -13,10 +13,13 @@ public class Plan {
 
     private List<Class> classes;
     private List<List<String>> plans;  
+    private String season;
 
-    public Plan(String[] courses, WebDriver driver){
+    // season should be in lowercase
+    public Plan(String[] courses, WebDriver driver, String season){
         this.classes = getClasses(courses, driver);
         this.plans = new ArrayList<>();
+        this.season = season;
     }
 
     // generate up to n plans using recursive backtracking
@@ -210,7 +213,8 @@ public class Plan {
 
             // check box for spring quarter only if multiple classes
             if (numRows > 1){
-                help.clickWhenPresent(driver, By.id("term__Spring 2025"));
+                String term = "term__" + season.toUpperCase();
+                help.clickWhenPresent(driver, By.cssSelector("input[name^='" + term + "']"));
             }
 
             // then get the first link in the search results
@@ -230,7 +234,7 @@ public class Plan {
             // I WANT LATE CLASSES!
             while(true){
                 // try getting id
-                String getID = "spring-" + String.valueOf((char)('a' + lectIdx));
+                String getID = season + "-" + String.valueOf((char)('a' + lectIdx));
                 
                 try {
                     WebElement tRow = driver.findElement(By.id(getID));
