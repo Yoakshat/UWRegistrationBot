@@ -27,17 +27,17 @@ public class Main {
 
         // ERROR with following classes
         
-        // String[] courseArray = {"GEOG 342", "CSE 312", "CSE 332", "DRAMA 252"};
+        String[] courseArray = {"BIOL 180", "CHEM 237", "PHYS 122"};
 
-        // Plan plan = new Plan(courseArray, driver, "spring"); 
+        Plan plan = new Plan(courseArray, driver, "autumn", false, false); 
         // 27 possibilities with 3 classes
-        // plan.createPlans(1000); 
+        plan.createPlans(1000); 
 
         
         // this is the trick!
         // System.out.println("spring-" + String.valueOf((char)('a' + 2)));
 
-        List<String> slns = new ArrayList<String>();
+        /*List<String> slns = new ArrayList<String>();
         slns.add("131");
         slns.add("234");
         slns.add("331");
@@ -47,7 +47,7 @@ public class Main {
             action(driver, obj); 
         } catch (Exception e){
             // AlarmSound.sound();
-        }
+        }*/
 
     }
 

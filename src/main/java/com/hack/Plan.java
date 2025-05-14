@@ -15,11 +15,17 @@ public class Plan {
     private List<List<String>> plans;  
     private String season;
 
+    private boolean early; 
+    private boolean backToBack; 
+
     // season should be in lowercase
-    public Plan(String[] courses, WebDriver driver, String season){
+    public Plan(String[] courses, WebDriver driver, String season, boolean early, boolean backToBack){
+        this.season = season;
         this.classes = getClasses(courses, driver);
         this.plans = new ArrayList<>();
-        this.season = season;
+
+        this.early = early; 
+        this.backToBack = backToBack;
     }
 
     // generate up to n plans using recursive backtracking
@@ -131,7 +137,9 @@ public class Plan {
 
         return new TimeRange(timeElems.get(0).getText(), 
                     timeElems.get(1).getText(), 
-                    Arrays.asList(days.split("[, ]+")));
+                    Arrays.asList(days.split("[, ]+")),
+                    this.early, 
+                    this.backToBack);
     }
 
     private QuizSection createQuiz(WebElement tRow) throws ParseException{
@@ -165,9 +173,10 @@ public class Plan {
 
         // check if number of seats > 20 
         // (otherwise most likely another special class)
+        
         if(lecture){
             String seatString = tRow.findElement(By.xpath("tr[1]/td[7]/small")).getText();
-            //  get the last element
+            //  get the last elementå
             String[] seatArr = seatString.split("\\s+");
             int numSeats = Integer.parseInt(seatArr[seatArr.length - 1]);
 
@@ -213,7 +222,9 @@ public class Plan {
 
             // check box for spring quarter only if multiple classes
             if (numRows > 1){
-                String term = "term__" + season.toUpperCase();
+                String capSeason = season.substring(0, 1).toUpperCase() + season.substring(1);
+                String term = "term__" + capSeason;
+                System.out.println(term);
                 help.clickWhenPresent(driver, By.cssSelector("input[name^='" + term + "']"));
             }
 
