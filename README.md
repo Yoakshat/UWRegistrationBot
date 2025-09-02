@@ -7,6 +7,10 @@ Plan plan = new Plan(courseArray, driver, "autumn", false, false);
 plan.createPlans(1000); 
 ```
 
+This will then give you your SLN codes. 
+
+Next, inside Main unncomment and replace the SLN codes with the ones the program gave you. 
+
 Run this on the-day of registration and uncomment the line inside Main.action. You'll have to login yourself, because of two-factor authentication, but after that, this will help keep the page alive in the night. This time should be just a little bit before your registration is. 
 ```
 help.keepPageActive(driver, "05:57");
