@@ -24,8 +24,6 @@ public class Main {
         slns.add("13232");*/
 
         // 5 classes -> 720 possibilities
-
-        // ERROR with following classes
         
         String[] courseArray = {"BIOL 180", "CHEM 237", "PHYS 122"};
 
