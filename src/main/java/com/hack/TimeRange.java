@@ -24,6 +24,8 @@ public class TimeRange {
 
         this.early = early; 
         this.backToBack = backToBack;
+
+        System.out.println("Created TimeRange: " + this.start.toString() + " to " + this.end.toString() + " on " + this.days.toString());
     }   
 
     private boolean daysShared(TimeRange other){
@@ -54,11 +56,6 @@ public class TimeRange {
             otherStart = Date.from(other.start.toInstant().minusSeconds(11 * 60));
             otherEnd = Date.from(other.end.toInstant().plusSeconds(11 * 60));
         }
-
-        
-        
-
-        // 8:20 - 9:30 
 
         // first check if any days are shared 
         if (daysShared(other)){

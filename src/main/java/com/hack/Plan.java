@@ -166,10 +166,9 @@ public class Plan {
             return false; 
         }
 
-        // check if not too early
-        /*if(getTimeRange(tRow).tooEarly()){
+        if(getTimeRange(tRow).tooEarly()){
             return false;
-        }*/
+        }
 
         // check if number of seats > 20 
         // (otherwise most likely another special class)
@@ -202,7 +201,7 @@ public class Plan {
         // first get to page
         driver.get("https://myplan.uw.edu/course/");
         // then click seattle campus
-        help.clickWhenPresent(driver, By.id("seattle-campus-selection"));
+        // help.clickWhenPresent(driver, By.id("seattle-campus-selection"));
         
         // then search for keys and press button search
         ArrayList<Class> classes = new ArrayList<>();
@@ -210,7 +209,8 @@ public class Plan {
             System.out.println(course + "\n");
 
             driver.get("https://myplan.uw.edu/course/");
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+            // driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+            help.waitTillPresent(driver, By.className("form-control"));
 
             driver.findElement(By.className("form-control")).sendKeys(course); 
             driver.findElement(By.cssSelector("button[type='submit']")).click();

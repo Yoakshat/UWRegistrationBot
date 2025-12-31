@@ -16,53 +16,32 @@ public class Main {
     public static void main(String[] args) throws ParseException{
         WebDriver driver = new ChromeDriver();
 
-        // Duo.acceptCall();
-        /*List<String> slns = new ArrayList<String>();
-        slns.add("13432");
-        slns.add("28719");
-        slns.add("62713");
-        slns.add("13232");*/
-
-        // 5 classes -> 720 possibilities
-
-        // ERROR with following classes
-        
-        String[] courseArray = {"BIOL 180", "CHEM 237", "PHYS 122"};
-
-        Plan plan = new Plan(courseArray, driver, "autumn", false, false); 
+        // FOR PLANNING 
+        String[] courseArray = {"MATH 126", "CSE 121", "NUTR 200"};
+        Plan plan = new Plan(courseArray, driver, "winter", true, true); 
         // 27 possibilities with 3 classes
         plan.createPlans(1000); 
 
-        
-        // this is the trick!
-        // System.out.println("spring-" + String.valueOf((char)('a' + 2)));
+        /* FOR REGISTRATION */
+        /*String[] slns = {"12908", "12909", "12923", "12924", "13076", "13078", "22074"};
+        List<String> slnList = Arrays.asList(slns);
 
-        /*List<String> slns = new ArrayList<String>();
-        slns.add("131");
-        slns.add("234");
-        slns.add("331");
-
-        Optimal obj = new Optimal(driver, slns);
+        Optimal obj = new Optimal(driver, slnList);
         try{
             action(driver, obj); 
         } catch (Exception e){
-            // AlarmSound.sound();
+            AlarmSound.sound();
         }*/
 
     }
 
     public static void action(WebDriver driver, Optimal obj){
-        
-        
         // full url needed
         driver.get("https://my.uw.edu/");
 
 
         Helper help = new Helper(); 
         help.login(driver); 
-
-
-        
             
         By acd = By.cssSelector("a[href='/academics/']");
         help.clickWhenPresent(driver, acd);
@@ -71,7 +50,7 @@ public class Main {
         help.clickWhenPresent(driver, reg);
 
         // comment out this line day-of
-        // help.keepPageActive(driver, "05:57");
+        help.keepPageActive(driver, "05:57");
 
         obj.registerEverything();
         
